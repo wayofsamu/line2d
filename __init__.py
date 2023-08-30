@@ -28,7 +28,6 @@ class Thumbnails(foo.Operator):
 
         num_samples = len(filepaths)
 
-        import os
         for i, (filepath, _) in enumerate(zip(filepaths, groups)):
             progress_label = f"Loading {i} of {num_samples}"
             progress_view = types.ProgressView(label=progress_label)
@@ -43,19 +42,30 @@ class Thumbnails(foo.Operator):
         
             image_path = filepath.replace(".pcd", ".png")
 
+            filename = os.path.basename(image_path)
+            folder = os.path.dirname(image_path)
+            image_path = folder + "/thumbnails/"
+
+            if not os.path.exists(image_path):
+                os.mkdir(image_path)
+            image_path += filename
+
             with open(filepath, 'r') as f:
                 data = json.load(f)
                 plt.plot(data["x"], data["y"])
                 plt.xlabel("Input")
                 plt.ylabel("Output")
                 plt.tight_layout()
-                plt.savefig(image_path, dpi=300)
+                plt.savefig(image_path, dpi=150)
                 plt.close()
                 im = Image.open(image_path)
                 width, height = im.size
             
 
-            metadata = fou3d.OrthographicProjectionMetadata(min_bound=None, max_bound=None, width=width, height=height)
+            metadata = fou3d.OrthographicProjectionMetadata(min_bound=None,
+                                                            max_bound=None,
+                                                            width=width,
+                                                            height=height)
 
             metadata.filepath = os.path.abspath(image_path)
 
@@ -72,22 +82,7 @@ class Thumbnails(foo.Operator):
         yield ctx.trigger("show_output", show_output_params)
         dataset.set_values("orthographic_projection_metadata", all_metadata)
         dataset.save()
-            
-    def resolve_placement(self, ctx):
-        return types.Placement(
-            # Display placement in the actions row of samples grid
-            types.Places.SAMPLES_GRID_SECONDARY_ACTIONS,
-            # Display a button as the placement
-            types.Button(
-                # label for placement button visible on hover
-                label="Generate Thumbnails",
-                # icon for placement button. If not provided, button with label
-                # will be displayed
-                icon=None,
-                # skip operator prompt when we do not require an input from the user
-                prompt=False
-            )
-        )
+
 
 class LoadExampleData(foo.Operator):
     @property
@@ -107,16 +102,13 @@ class LoadExampleData(foo.Operator):
 
         samples = []
         outfolder = ctx.params["outfolder"]
-        ctx.log(outfolder)
 
         if not os.path.exists(outfolder):
             os.mkdir(outfolder)
-        ctx.log(outfolder)
 
         for i in range(100):
             points0 = np.random.normal(0, size=(10000))
             filepath = outfolder+f"/line2d_{i}.pcd"
-            ctx.log(filepath)
 
             with open(filepath, 'w') as f:
                 json.dump(dict(x=list(range(len(points0))), y=list(points0)), f)
@@ -132,6 +124,7 @@ class LoadExampleData(foo.Operator):
         dataset.add_samples(samples)
         dataset.persistent = True
         dataset.save()
+        ctx.log(f"Generated Example data in {outfolder}")
     
         
 
