@@ -14,14 +14,13 @@ class Thumbnails(foo.Operator):
     @property
     def config(self):
         return foo.OperatorConfig(
-            name="line2d_thumbnails",
-            label="Thumbnails",
-            execute_as_generator=True)
+            name="line2d_thumbnails", label="Thumbnails", execute_as_generator=True
+        )
 
     async def execute(self, ctx):
         dataset = ctx.dataset
         filepaths = dataset.values("filepath")
-    
+
         groups = itertools.repeat(None)
 
         all_metadata = []
@@ -39,7 +38,6 @@ class Thumbnails(foo.Operator):
             }
             yield ctx.trigger("show_output", show_output_params)
 
-        
             image_path = filepath.replace(".pcd", ".png")
 
             filename = os.path.basename(image_path)
@@ -50,7 +48,7 @@ class Thumbnails(foo.Operator):
                 os.mkdir(image_path)
             image_path += filename
 
-            with open(filepath, 'r') as f:
+            with open(filepath, "r") as f:
                 data = json.load(f)
                 plt.plot(data["x"], data["y"])
                 plt.xlabel("Input")
@@ -60,12 +58,10 @@ class Thumbnails(foo.Operator):
                 plt.close()
                 im = Image.open(image_path)
                 width, height = im.size
-            
 
-            metadata = fou3d.OrthographicProjectionMetadata(min_bound=None,
-                                                            max_bound=None,
-                                                            width=width,
-                                                            height=height)
+            metadata = fou3d.OrthographicProjectionMetadata(
+                min_bound=None, max_bound=None, width=width, height=height
+            )
 
             metadata.filepath = os.path.abspath(image_path)
 
@@ -88,9 +84,9 @@ class LoadExampleData(foo.Operator):
     @property
     def config(self):
         return foo.OperatorConfig(
-            name="line2d_example_dataset",
-            label="Generate Example Data")
-    
+            name="line2d_example_dataset", label="Generate Example Data"
+        )
+
     def resolve_input(self, ctx):
         inputs = types.Object()
         inputs.str("outfolder", label="Output Folder Path", required=True)
@@ -108,15 +104,16 @@ class LoadExampleData(foo.Operator):
 
         for i in range(100):
             points0 = np.random.normal(0, size=(10000))
-            filepath = outfolder+f"/line2d_{i}.pcd"
+            filepath = outfolder + f"/line2d_{i}.pcd"
 
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 json.dump(dict(x=list(range(len(points0))), y=list(points0)), f)
 
             samples.append(
                 fo.Sample(
                     filepath=filepath,
-                ))
+                )
+            )
 
         if fo.dataset_exists(dataset_name):
             fo.delete_dataset(dataset_name)
@@ -125,8 +122,7 @@ class LoadExampleData(foo.Operator):
         dataset.persistent = True
         dataset.save()
         ctx.log(f"Generated Example data in {outfolder}")
-    
-        
+
 
 def register(p):
     p.register(Thumbnails)
