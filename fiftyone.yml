@@ -1,0 +1,8 @@
+fiftyone:
+  version: "*"
+name: "line2d"
+version: "1.0.0"
+description: "Fiftyone starter plugin"
+operators:
+  - "line2d_thumbnails"
+  - "line2d_example_dataset"
