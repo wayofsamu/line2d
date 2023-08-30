@@ -19,9 +19,20 @@ In `LoadExampleData` in `__init__.py` you can see how data can be gernerated.
 
 The plugin also adds two buttons "Genrate Thumbnails" and "Generate Example Dataset".
 
+### Plugin Installation
+
+To install the plugin, run the following command:
+
+```shell
+fiftyone plugins download https://github.com/wayofsamu/line2d
+```
 
 ### Operators
 
 ### `line2d_example_dataset`
 
 - Generate an example dataset at given path
+
+### `line2d_thumbnails`
+
+- Generate thumbnails into the same directory as the dataset files are
