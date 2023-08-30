@@ -1,6 +1,5 @@
 import fiftyone.operators as foo
 import fiftyone.operators.types as types
-from time import sleep
 import itertools
 import matplotlib.pyplot as plt
 import json
@@ -46,10 +45,11 @@ class Thumbnails(foo.Operator):
 
             with open(filepath, 'r') as f:
                 data = json.load(f)
-                plt.plot(data["x"], data["y"],linewidth=0.1)
+                plt.plot(data["x"], data["y"])
+                plt.xlabel("Input")
+                plt.ylabel("Output")
                 plt.tight_layout()
-                plt.axis('off')
-                plt.savefig(image_path)
+                plt.savefig(image_path, dpi=300)
                 plt.close()
                 im = Image.open(image_path)
                 width, height = im.size
@@ -103,6 +103,8 @@ class LoadExampleData(foo.Operator):
         return types.Property(inputs, view=types.View(label=header))
 
     def execute(self, ctx):
+        dataset_name = "line2d_example_dataset"
+
         samples = []
         outfolder = ctx.params["outfolder"]
         ctx.log(outfolder)
@@ -124,27 +126,14 @@ class LoadExampleData(foo.Operator):
                     filepath=filepath,
                 ))
 
-        dataset = fo.Dataset("line2d_example_dataset")
+        if fo.dataset_exists(dataset_name):
+            fo.delete_dataset(dataset_name)
+        dataset = fo.Dataset(dataset_name)
         dataset.add_samples(samples)
         dataset.persistent = True
         dataset.save()
     
-            
-    def resolve_placement(self, ctx):
-        return types.Placement(
-            # Display placement in the actions row of samples grid
-            types.Places.SAMPLES_GRID_SECONDARY_ACTIONS,
-            # Display a button as the placement
-            types.Button(
-                # label for placement button visible on hover
-                label="Generate Example Dataset",
-                # icon for placement button. If not provided, button with label
-                # will be displayed
-                icon=None,
-                # skip operator prompt when we do not require an input from the user
-                prompt=True
-            )
-        )
+        
 
 def register(p):
     p.register(Thumbnails)

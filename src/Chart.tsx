@@ -13,9 +13,6 @@ export interface ReactEChartsProps {
 
 // set state with the result
 const option: EChartsOption = {
-  title: {
-    text: "Test"
-  },
   tooltip: {
     trigger: "axis"
   },
@@ -32,8 +29,6 @@ const option: EChartsOption = {
     {
       startValue: 0,
       height: "10%",
-      start: 30,
-      end: 40,
       bottom: "2%"
     },
     {
@@ -44,16 +39,12 @@ const option: EChartsOption = {
   toolbox: {
     right: 10,
     feature: {
-      restore: {},
       saveAsImage: {},
       dataView:{},
-      magicType: {
-        type: ['line', 'bar', 'stack']
-    }
-    }
+    },
   },
   series: {
-    name: "y-Value",
+    name: "output",
     type: "line",
     animation: false,
     data: []

@@ -1,4 +1,8 @@
-# line2d
+# Line 2D
+
+| | |
+| --- | --- |
+|![Alt text](thumbnails.png)|![Alt text](modal.png)|
 
 This plugin uses eCharts to visualize x,y-Points as a line chart.
 For now the visualizer component can only be overwritte by a plugin if its filepath has an ".pcd"-extension.
@@ -15,8 +19,9 @@ In `LoadExampleData` in `__init__.py` you can see how data can be gernerated.
 
 The plugin also adds two buttons "Genrate Thumbnails" and "Generate Example Dataset".
 
-### Screenshots
 
-| | |
-| --- | --- |
-|![Alt text](thumbnails.png)|![Alt text](modal.png)|
+### Operators
+
+### `line2d_example_dataset`
+
+- Generate an example dataset at given path
