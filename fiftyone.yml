@@ -1,8 +1,10 @@
+name: "@wayofsamu/line2d"
+description: "Visualize x,y-Points as line charts."
+version: 1.0.1
 fiftyone:
   version: "*"
-name: "line2d"
-version: "1.0.0"
-description: "Fiftyone starter plugin"
+license: MIT
+url: "https://github.com/wayofsamu/line2d/blob/main/README.md"
 operators:
   - "line2d_thumbnails"
   - "line2d_example_dataset"

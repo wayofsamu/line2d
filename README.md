@@ -2,7 +2,7 @@
 
 | | |
 | --- | --- |
-|![Alt text](thumbnails.png)|![Alt text](modal.png)|
+|![Alt text](assets/thumbnails.png)|![Alt text](assets/sample.png)|
 
 This plugin uses eCharts to visualize x,y-Points as a line chart.
 For now the visualizer component can only be overwritte by a plugin if its filepath has an ".pcd"-extension.
